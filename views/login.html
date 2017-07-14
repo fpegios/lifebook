@@ -1,0 +1,123 @@
+<section id="login" class="hidden-xs hidden-sm" >
+    <div ng-if="isLoading" id="loading-bar-auth"></div>
+    <div class="container">    
+        <div class="row row-auth-content">
+
+            <h1 align="center">Log in to your LifeBook account</h1>
+            <h4 class="hidden-xs" style="margin-top:20px" align="center">Type your email and password</h4>
+
+            <div class="container card-container">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-sm-offset-4 card">
+                        <form class="col-xs-12 col-sm-12" role="form" name="loginForm" ng-submit="login()">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12" align="left">
+
+                                <div class="form-group" ng-class="{ 'has-error' : loginForm.email.$error.required && !loginForm.email.$pristine }">
+                                    <label for="email" class="cols-sm-2 control-label">Email</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                        <input type="email" id="email" class="form-control" name="email" ng-model="loginData.email" placeholder="Enter your Email" ng-required="true" autofocus>
+                                    </div>
+                                    <span ng-show="loginForm.email.$error.required && !loginForm.email.$pristine" class="help-inline">Email required</span>
+                                    <span ng-show="loginForm.email.$error.email" class="help-inline">Invalid email</span>
+                                </div>
+
+                                <div class="form-group" ng-class="{ 'has-error' : loginForm.password.$error.required && !loginForm.password.$pristine }">
+                                    <label for="password" class="cols-sm-2 control-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                        <input type="password" id="password" class="form-control" name="password" ng-model="loginData.password" placeholder="Enter your Password" ng-required="true">
+                                    </div>
+                                    <span ng-show="loginForm.password.$error.required && !loginForm.password.$pristine" class="help-inline">Password required</span>
+                                </div>
+
+                                <div class="form-group" class="checkbox">
+                                    <label>
+                                        <input type="checkbox" value="remember-me"> Remember me
+                                    </label>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <span ng-show="wrongInputs" class="help-inline">Wrong Inputs</span>
+                                </div>
+                                <div class="form-group">
+                                    <span ng-show="internalServerError" class="help-inline">Internal Server Error! Please try again later.</span>
+                                </div>
+
+                                <div class="form-group" align="center">
+                                    <button type="submit" class="btn btn-block btn-primary" ng-disabled="loginForm.$invalid">Log In</button>
+                                </div>
+
+                                <div class="form-group" align="center">
+                                    <a role="button" ui-sref="signup" class="card-footer">
+                                        Sign Up
+                                    </a> 
+                                </div>
+                            </div>
+                            </div>
+
+                        </form><!-- /form -->
+                    </div>
+                </div>
+            </div>
+               
+        </div>
+    </div>
+</section>                    
+
+
+<section id="mobile-login" class="visible-xs visible-sm">
+    <div ng-if="isLoading" id="loading-bar-auth-sm"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 login-title" align="center">
+                <h1>Lifebook</h1>
+            </div>
+        </div>
+        
+        
+        <div class="row well login-inputs">
+            <div class="col-xs-12" >
+                <form role="form" name="mloginForm" ng-submit="login()">
+                    <div class="row">
+                        <div class="col-xs-12" align="left">
+                            <div class="form-group" ng-class="{ 'has-error' : mloginForm.email.$error.required && !mloginForm.email.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                    <input type="email" id="email" class="form-control" name="email" ng-model="loginData.email" placeholder="Enter your Email" ng-required="true" autofocus>
+                                </div>
+                                <span ng-show="mloginForm.email.$error.required && !mloginForm.email.$pristine" class="help-inline">Email required</span>
+                                <span ng-show="mloginForm.email.$error.email" class="help-inline">Invalid email</span>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : mloginForm.password.$error.required && !mloginForm.password.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                    <input type="password" id="password" class="form-control" name="password" ng-model="loginData.password" placeholder="Enter your Password" ng-required="true">
+                                </div>
+                                <span ng-show="mloginForm.password.$error.required && !mloginForm.password.$pristine" class="help-inline">Password required</span>
+                            </div>
+                            <div ng-show="wrongInputs" class="alert alert-danger">
+                                <strong>Wrong Inputs!</strong>
+                            </div>
+                            <div ng-show="internalServerError" class="alert alert-danger">
+                                <strong>Internal Server Error! Please try again later.</strong>
+                            </div>
+
+                            <div class="form-group" align="center">
+                                <button type="submit" class="btn btn-block btn-primary" ng-disabled="mloginForm.$invalid">Log In</button>
+                            </div>
+
+                            <div class="form-group" align="center"> 
+                                <a class="go-signup-btn" role="button" ui-sref="signup">
+                                    Sign Up
+                                </a> 
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

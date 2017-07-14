@@ -1,0 +1,73 @@
+<section id="notifications" class="hidden-xs">
+    <div ng-if="isLoading" id="loading-bar"></div>
+    <div class="container well">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3><i role="button" ng-click="goProfile()" class="fa fa-globe" aria-hidden="true"></i> Your Notifications</h3> 
+                <hr/>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div ng-show="noNotifications && !internalServerError" class="alert alert-info">
+                    <strong>No notifications!</strong>
+                </div>     
+                <div ng-show="internalServerError" class="alert alert-danger">
+                    <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                </div>
+                
+                <div class="notification-box" ng-repeat="notification in notifications">
+                    <img class="img-rounded img-notification-user" ng-src="users/profile_imgs/{{notification.sender_id}}.jpg" onerror="this.src='img/profile-default.jpg'">
+
+                    <span class="notification-text">
+                        <span class="notification-name" role="button" ng-click="goProfile(notification.sender_id)">{{notification.sender_name}}</span> liked a post you shared: "{{notification.post_text}}".
+                    </span>
+                    <span class="notification-date">
+                        {{ notification.dDate + " " + notification.dMonth + " " + notification.dYear + " " + notification.dHours + ":" + notification.dMinutes}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section id="mobile-notifications" class="visible-xs">    
+    <div ng-if="isLoading" id="loading-bar-sm"></div>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mobile-notification-title" align="center">
+                    <h4>Your Notifications</h4>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mobile-notification-panel">
+                    
+                    <div ng-show="noNotifications && !internalServerError" class="alert alert-info">
+                        <strong>No notifications!</strong>
+                    </div>     
+                    <div ng-show="internalServerError" class="alert alert-danger">
+                        <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                    </div>
+                    
+                    <div class="mobile-notification-box" ng-repeat="notification in notifications">
+                        <img class="img-rounded img-notification-user" ng-src="users/profile_imgs/{{notification.sender_id}}.jpg" onerror="this.src='img/profile-default.jpg'">
+
+                        <span class="mobile-notification-text">
+                            <span class="notification-name" role="button" ng-click="goProfile(notification.sender_id)">{{notification.sender_name}}</span> liked: "{{notification.post_text}}".
+                        </span>
+                        <span class="notification-date">
+                                {{ notification.dDate + " " + notification.dMonth + " " + notification.dYear + " " + notification.dHours + ":" + notification.dMinutes}}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

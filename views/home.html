@@ -1,0 +1,80 @@
+<section id="home" ng-controller="HomeController">
+    <div ng-if="isLoading" id="loading-bar" class="hidden-xs hidden-sm"></div>
+    <div ng-if="isLoading" id="loading-bar-sm" class="visible-xs visible-sm"></div>
+    <div class="container well">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 hidden-xs">
+                <h3><i class="fa fa-newspaper-o" aria-hidden="true"></i> News Feed</h3>
+                <hr/>
+                
+            </div>
+            <div class="col-xs-12 col-sm-5 form-group pull-right hidden-xs">
+                <div class="input-group h2">
+                    <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" ng-model="searchUser" placeholder="Search user...">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div ng-show="internalServerError" class="alert alert-danger">
+                    <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                </div>
+                
+                <form ng-show="!internalServerError" role="form" name="newpostForm" ng-submit="insertPost()">
+                    <div class="panel panel-default">
+                        <div class="panel-header">
+                            <h4><i class="fa fa-pencil" aria-hidden="true"></i> Create a post</h4>
+                        </div>
+                        <div class="panel-body form-group">
+                            <textarea class="form-control" rows="3" name="status" ng-model="newPost.text" placeholder="What's on your mind?" ng-required="true"></textarea>
+                        </div>
+                        <div class="panel-footer">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-map-marker"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-users"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-camera"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-video-camera"></i></button>
+                          </div>
+
+                          <div class="pull-right">
+                            <button type="submit" class="btn btn-primary" ng-disabled="newpostForm.$invalid"> Post </button>
+                          </div>  
+                        </div>
+                    </div>
+                </form>
+                
+                
+                
+                <div ng-show="noPosts && !internalServerError" class="alert alert-info">
+                    <strong>No posts available!</strong>
+                </div>
+                
+                <div class="panel panel-default" ng-repeat="post in posts | filter: {ufullname: searchUser}">
+                    <div class="panel-header">
+                        <a role="button" ng-click="goProfile(post.uid)"><img class="panel-thumb" ng-src="users/profile_imgs/{{post.uid}}.jpg" onerror="this.src='img/profile-default.jpg'"></a>
+                        <p class="panel-author">
+                            <a class="panel-author" role="button" ng-click="goProfile(post.uid)">{{post.ufullname}}</a>
+                            <br>
+                            <span class="panel-date">
+                                {{ post.dDate + " " + post.dMonth + " " + post.dYear + " " + post.dHours + ":" + post.dMinutes}}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{post.text}}</p>
+                    </div>
+                    <div class="panel-footer">
+                        <span ng-show="!post.isUserLiked" role="button" ng-click="insertPostLike(post);post.isUserLiked = !post.isUserLiked;" class="panel-social-actions"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like ({{post.likes}})</span>
+                        <span ng-show="post.isUserLiked" role="button" ng-click="deletePostLike(post);post.isUserLiked = !post.isUserLiked;" class="panel-social-actions dislike"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like ({{post.likes}})</span>
+                        <span role="button" class="panel-social-actions"><i class="fa fa-comment" aria-hidden="true"></i> Comment</span>
+                        <span role="button" class="panel-social-actions"><i class="fa fa-share" aria-hidden="true"></i> Share</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+</section>

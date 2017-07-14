@@ -1,0 +1,60 @@
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top hidden-xs hidden-sm" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle navbar-left collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" ui-sref="home" role="button">LifeBook</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ui-sref-active="active">
+                    <a class="p" role="button" ng-click="goProfile()"> 
+                        <img class="img-header-profile" ng-src="users/profile_imgs/{{uid}}.jpg" onerror="this.src='img/profile-default.jpg'"> {{ firstname}} {{ lastname}}
+                    </a>
+                </li>
+                <li><a class="inactive-link hidden-xs hidden-sm" href="#">|</a></li>
+                <li ui-sref-active="active"><a ui-sref="home" role="button">Home</a></li>
+                <li ui-sref-active="active"><a ui-sref="messages" role="button"><i class="fa fa-envelope fa-lg" aria-hidden="true"></i><sup ng-show="notification.message > 0" class="notification-sup-lg">{{notification.message}}</sup></a></li>
+                <li ui-sref-active="active"><a ui-sref="notifications" role="button"><i class="fa fa-globe fa-lg" aria-hidden="true"></i><sup ng-show="notification.like > 0" class="notification-sup-lg">{{notification.like}}</sup></a></li>
+                <li><a role="button" ng-click="logout()"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i> Logout</a>
+            </ul>   
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="mobile-menu visible-xs visible-sm">
+    <ul>
+        <li ui-sref-active="active">
+            <a ui-sref="home" role="button">
+                <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li ui-sref-active="active">
+            <a role="button" ui-sref="profile" ng-click="goProfile()" role="button">
+                <i class="fa fa-user" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li ui-sref-active="active">
+            <a ui-sref="messages" role="button">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <sup ng-show="notification.message > 0" class="notification-sup-xs">{{notification.message}}</sup>
+            </a>
+        </li>
+        <li ui-sref-active="active">
+            <a ui-sref="notifications" role="button">
+                <i class="fa fa-globe" aria-hidden="true"></i>
+                <sup ng-show="notification.like > 0" class="notification-sup-xs">{{notification.like}}</sup>
+            </a>
+        </li>
+        <li>
+            <a role="button" ng-click="logout()">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,185 @@
+<section id="profile" ng-controller="ProfileController">
+    <div ng-if="isLoading" id="loading-bar" class="hidden-xs hidden-sm"></div>
+    <div ng-if="isLoading" id="loading-bar-sm" class="visible-xs visible-sm"></div>
+    
+    <div id="cover" class="container well" ng-style="{'background': 'url('+ user.cover_img +') no-repeat center'}">
+        <div class="row row-after-header">
+            <div ng-show="userProfile" class="col-xs-12">
+                <button type="button" class="btn btn-primary-outline" type="file" ngf-select="uploadImgCover($file, $invalidFiles)" accept="image/*" ngf-max-size="8MB">
+                    <i class="fa fa-camera" aria-hidden="true"></i> <b>Update Cover</b>
+                </button>
+            </div>
+        </div>
+        <div class="row row-content">
+            <div class="col-xs-12 col-sm-3 col-md-2">
+                <div ng-show="userProfile" role="button" class="img-container" type="file" ngf-select="uploadImgProfile($file, $invalidFiles)"
+                    accept="image/*" ngf-max-size="4MB">
+                    <div class="positioning-bottom">
+                        <i class="fa fa-camera" aria-hidden="true"></i> Update Photo
+                    </div>
+                    <img ng-src="{{user.profile_img}}" class="img-responsive img-rounded img-profile" alt={{username}} />
+                </div>
+                <img ng-show="!userProfile" ng-src="{{user.profile_img}}" class="img-responsive img-rounded img-profile" alt={{username}} />
+            </div>
+            
+            <div id="user-name" class="col-xs-12 col-sm-3 col-md-3">
+                <p class="hidden-xs" style="padding:65px"></p>
+                <h3><b>{{user.firstname}} {{user.lastname}}</b></h3>
+            </div>
+            
+            <div ng-show="userProfile" class="col-xs-12 col-sm-4 col-md-3 pull-right">
+                <p class="hidden-xs" style="padding:65px"></p>
+                <button type="button" class="btn btn-block btn-primary-outline" ui-sref="search_friends">
+                    <i class="fa fa-users" aria-hidden="true"></i> <b>Search Friends</b>
+                </button>
+            </div>
+            
+            <div ng-show="!userProfile" class="col-xs-12 col-sm-4 col-md-3 pull-right">
+                <p class="hidden-xs" style="padding:65px"></p>
+                <button ng-show="!isFollowed" type="button" class="btn btn-primary btn-block" ng-click="followUser(user.uid)"> <i class="fa fa-user-plus" aria-hidden="true"></i> Follow</button>
+                <button ng-show="isFollowed" type="button" class="btn btn-danger btn-block" ng-click="unfollowUser(user.uid)"><i class="fa fa-times" aria-hidden="true"></i> Unfollow </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container well">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-header">
+                        <b>
+                            <h4>
+                                <i class="fa fa-globe" aria-hidden="true"></i> Intro 
+                                <i ng-show="userProfile" role="button" ng-click="prevInfo.job = user.job; prevInfo.studies = user.studies; prevInfo.live_location = user.live_location; prevInfo.birth_location = user.birth_location; update.info = !update.info" class="fa fa-pencil-square-o fa-icon-btn pull-right" title="Edit Info" aria-hidden="true"></i>
+                            </h4>
+                        </b>
+                    </div>
+                    <div class="panel-body" ng-show="!update.info">
+                        <p><i class="fa fa-briefcase fa-icon" aria-hidden="true"></i> <span ng-show="!user.job">What's your job?</span><span ng-show="user.job">{{user.job}}</span></p>
+                        <p><i class="fa fa-graduation-cap fa-icon" aria-hidden="true"></i> <span ng-show="!user.studies">What did you study?</span><span ng-show="user.studies">{{user.studies}}</p>
+                        <p><i class="fa fa-home fa-icon" aria-hidden="true"></i> <span ng-show="!user.live_location">Where do you live?</span><span ng-show="user.live_location">{{user.live_location}}</p>
+                        <p><i class="fa fa-map-marker fa-icon" aria-hidden="true"></i> <span ng-show="!user.birth_location">Where are you from?</span><span ng-show="user.birth_location">{{user.birth_location}}</p>
+                    </div>
+                    <div class="panel-body" ng-show="update.info">
+                        <form role="form" name="updateinfoForm" ng-submit="updateInfo(user)">
+                            <div class="form-group">
+                                <i class="fa fa-briefcase fa-icon" aria-hidden="true"></i> What's your job?
+                                <input type="text" id="job" class="form-control" name="job" ng-model="user.job" ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <i class="fa fa-graduation-cap fa-icon" aria-hidden="true"></i> What have you studied?
+                                <input type="text" id="studies" class="form-control" name="studies" ng-model="user.studies" ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <i class="fa fa-home fa-icon" aria-hidden="true"></i> Where do you live?
+                                <input type="text" id="live_location" class="form-control" name="live_location" ng-model="user.live_location" ng-required="true">
+                            </div>
+                            <div class="form-group">
+                                <i class="fa fa-map-marker fa-icon" aria-hidden="true"></i> Where are you from?
+                                <input type="text" id="birth_location" class="form-control" name="birth_location" ng-model="user.birth_location" ng-required="true">
+                            </div>
+                            <div class="form-group pull-right">
+                                <button type="button" class="btn btn-default" ng-click="user.job = prevInfo.job; user.studies = prevInfo.studies; user.live_location = prevInfo.live_location; user.birth_location = prevInfo.birth_location; update.info = !update.info"> Cancel </button>
+                                <button type="submit" class="btn btn-primary" ng-disabled="updateinfoForm.$invalid"> Update </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+<!--
+                <div class="panel panel-default">
+                    <div class="panel-header">
+                        <b><h4><i class="fa fa-picture-o" aria-hidden="true"></i> Photos</h4></b>
+                    </div>
+                    <div class="panel-body">
+                    </div>
+                    <div class="panel-footer">
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-header">
+                        <b><h4><i class="fa fa-users" aria-hidden="true"></i> Followers</h4></b>
+                    </div>
+                    <div class="panel-body">
+                    </div>
+                    <div class="panel-footer">
+                    </div>
+                </div>
+-->
+            </div>
+            
+            <div class="col-xs-12 col-sm-8">
+                <div ng-show="internalServerError" class="alert alert-danger">
+                  <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                </div>
+                <form ng-show="userProfile && !internalServerError" role="form" name="newpostForm" ng-submit="insertPost()">
+                    <div class="panel panel-default">
+                        <div class="panel-header">
+                            <h4>Status</h4>
+                        </div>
+                        <div class="panel-body form-group">
+                            <textarea class="form-control" rows="3" name="status" ng-model="newPost.text" placeholder="What's on your mind?" ng-required="true"></textarea>
+                        </div>
+                        <div class="panel-footer">
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-map-marker"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-users"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-camera"></i></button>
+                            <button type="button" class="btn btn-link btn-icon"><i class="fa fa-video-camera"></i></button>
+                          </div>
+
+                          <div class="pull-right">
+                            <button type="submit" class="btn btn-primary" ng-disabled="newpostForm.$invalid"> Post </button>
+                          </div>  
+                        </div>
+                    </div>
+                </form>
+                
+                <div ng-show="noPosts && !internalServerError" class="alert alert-info">
+                    <strong>No posts available!</strong>
+                </div>
+                
+                <div class="panel panel-default" ng-repeat="post in posts">
+                    <div class="panel-header">
+                        <a role="button" ng-click="goProfile(post.uid)"><img class="panel-thumb" ng-src="{{user.profile_img}}"></a>
+                        <p class="panel-author">
+                            <a class="panel-author" role="button" ng-click="goProfile(post.uid)">{{post.ufullname}}</a>
+                            <br>
+                            <span class="panel-date">
+                                {{ post.dDate + " " + post.dMonth + " " + post.dYear + " " + post.dHours + ":" + post.dMinutes}}
+                            </span>
+                        </p>
+                        <div ng-show="userProfile" class="dropdown pull-right">
+                            <i class="fa fa-caret-down dropdown-toggle fa-icon-btn" role="button" data-toggle="dropdown" aria-hidden="true"></i>
+                            <ul class="dropdown-menu">
+                                <li><a role="button" ng-click="prevText = post.text; post.updatePost = !post.updatePost">Edit Post</a></li>
+                                <li><a role="button" ng-click="deletePost(post.id)">Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p ng-show="!post.updatePost">{{post.text}}</p>
+                        <form ng-show="post.updatePost" role="form" name="updatepostForm" ng-submit="updatePost(post)">
+                            <div class="form-group">
+                                <textarea class="form-control" rows="2" name="update-post" ng-model="post.text" ng-required="true"></textarea>
+                            </div>
+                            <div class="form-group pull-right btn-update-post">
+                                <button type="button" class="btn btn-default" ng-click="post.text = prevText; post.updatePost = !post.updatePost"> Cancel </button>
+                                <button type="submit" class="btn btn-primary" ng-disabled="updatepostForm.$invalid"> Update </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="panel-footer">
+                        <span ng-show="!post.isUserLiked" role="button" ng-click="insertPostLike(post);post.isUserLiked = !post.isUserLiked;" class="panel-social-actions"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like ({{post.likes}})</span>
+                        <span ng-show="post.isUserLiked" role="button" ng-click="deletePostLike(post);post.isUserLiked = !post.isUserLiked;" class="panel-social-actions dislike"><i class="fa fa-thumbs-up" aria-hidden="true"></i> Like ({{post.likes}})</span>
+                        <span role="button" class="panel-social-actions"><i class="fa fa-comment" aria-hidden="true"></i> Comment</span>
+                        <span role="button" class="panel-social-actions"><i class="fa fa-share" aria-hidden="true"></i> Share</span>
+                    </div>
+                </div>
+                                
+            </div>
+        </div>
+        
+        
+    </div>    
+    
+</section>                    

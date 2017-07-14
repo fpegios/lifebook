@@ -1,0 +1,31 @@
+{
+  "name": "lifebook",
+  "authors": [
+    "Fotis Pegios <fotispeg@gmail.com>"
+  ],
+  "description": "The social network of my life.",
+  "main": "index.html",
+  "keywords": [
+    "lifebook"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "font-awesome": "^4.7.0",
+    "angular": "^1.6.2",
+    "angular-animate": "^1.6.2",
+    "angular-bootstrap": "^2.5.0",
+    "angular-sanitize": "^1.6.2",
+    "angular-ui-router": "^0.4.2",
+    "jquery": "^3.1.1",
+    "ng-file-upload": "^12.2.13",
+    "angular-scroll-glue": "^2.2.0"
+  }
+}

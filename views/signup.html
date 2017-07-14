@@ -1,0 +1,245 @@
+<section id="signup" class="hidden-xs hidden-sm">
+    <div ng-if="isLoading" id="loading-bar-auth"></div>
+    <div class="container">    
+        <div class="row row-auth-content">
+
+            <h1 align="center">Create your LifeBook account</h1>
+            <h4 class="hidden-xs" style="margin-top:20px" align="center">Type your personal details and create your account</h4>
+            
+            <div class="container container-table card-container">
+                <div class="row vertical-center-row">
+                    <div class="text-center col-xs-12 col-sm-4 col-sm-offset-4 card">
+                        <form class="col-xs-12 col-sm-12" role="form" name="signupForm" ng-submit="validateSignup()">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12" align="left">
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.firstname.$error.required && !signupForm.firstname.$pristine }">
+                                        <label for="firstname" class="cols-sm-2 control-label">First Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                            <input type="text" id="firstname" class="form-control" name="firstname" ng-model="signupData.firstname" placeholder="Enter your First Name" ng-required="true" autofocus>
+                                        </div>
+                                        <span ng-show="signupForm.firstname.$error.required && !signupForm.firstname.$pristine" class="help-inline">First Name required</span>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.lastname.$error.required && !signupForm.lastname.$pristine }">
+                                        <label for="lastname" class="cols-sm-2 control-label">Last Name</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                            <input type="text" id="lastname" class="form-control" name="lastname" ng-model="signupData.lastname" placeholder="Enter your Last Name" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.lastname.$error.required && !signupForm.lastname.$pristine" class="help-inline">Last Name required</span>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.username.$error.required && !signupForm.username.$pristine }">
+                                        <label for="lastname" class="cols-sm-2 control-label">Username</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                            <input type="text" id="username" class="form-control" name="username" ng-model="signupData.username" placeholder="Enter your Username" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.username.$error.required && !signupForm.username.$pristine" class="help-inline">Username required</span>
+                                    </div>
+
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.email.$error.required && !signupForm.email.$pristine }">
+                                        <label for="email" class="cols-sm-2 control-label">Email</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                            <input type="email" id="email" class="form-control" name="email" ng-model="signupData.email" placeholder="Enter your Email" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.email.$error.required && !signupForm.email.$pristine" class="help-inline">Email required <br/></span>
+                                        <span ng-show="signupForm.email.$error.email" class="help-inline">Invalid email</span>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.password.$error.required && !signupForm.password.$pristine }">
+                                        <label for="password" class="cols-sm-2 control-label">Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                            <input type="password" id="password" class="form-control" name="password" ng-model="signupData.password" placeholder="Enter your Password" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.password.$error.required && !signupForm.password.$pristine" class="help-inline">Password required</span>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : (signupForm.confirmPassword.$error.required && !signupForm.confirmPassword.$pristine) || (!passwordsMatch() && !signupForm.confirmPassword.$pristine)}">
+                                        <label for="confirmPassword" class="cols-sm-2 control-label">Confirm Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                            <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" ng-model="confirmPassword" placeholder="Confirm your Password" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.confirmPassword.$error.required && !signupForm.confirmPassword.$pristine" class="help-inline">Password required <br/></span>
+                                        <span ng-show="!signupForm.confirmPassword.$pristine && !passwordsMatch()" class="help-inline">Passwords do not match</span>
+                                    </div>
+
+                                    <div class="form-group" class="radio">
+                                        <label for="password" class="cols-sm-2 control-label">Gender</label>
+                                        <div class="input-group">
+                                            <label class="radio-inline">
+                                                <input type="radio" id="male" name="gender" ng-model="signupData.gender" value="male">Male
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" id="female" name="gender" ng-model="signupData.gender" value="female">Female
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{ 'has-error' : signupForm.birthdate.$error.required && !signupForm.birthdate.$pristine }">
+                                        <label for="birthdate" class="cols-sm-2 control-label">Date of Birth</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fa fa-calendar fa" aria-hidden="true"></i></span>
+                                            <input type="date" max="{{maxDate}}" id="birthdate" class="form-control" name="birthdate" ng-model="signupData.birthdate" placeholder="Birth Date" ng-required="true">
+                                        </div>
+                                        <span ng-show="signupForm.birthdate.$error.required && !signupForm.birthdate.$pristine" class="help-inline">Birth date required</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span ng-show="emailExists" class="help-inline">Email exists <br/></span>
+                                        <span ng-show="usernameExists" class="help-inline">Username exists</span>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <span ng-show="internalServerError" class="help-inline">Internal Server Error! Please try again later.</span>
+                                    </div>
+
+                                    <div class="form-group" align="center">
+                                        <button type="submit" class="btn btn-block btn-primary" ng-disabled="signupForm.$invalid">Sign Up</button>
+                                    </div>
+                                    <div class="form-group" align="center">
+                                        <button type="button" ui-sref="login" class="btn btn-link card-footer">Log In</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form><!-- /form -->
+                    </div>
+                </div>
+            </div>
+            
+            
+        </div>                
+    </div>
+    
+    <div ng-controller="ModalSignupController as $ctrl" class="modal-demo">
+        <script type="text/ng-template" id="ModalSignup.html">
+
+            <div class="modal-body modal-sm" id="modal-body">
+                <p><strong>Thank you for registering!</strong> Now you can login to your account.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-block btn-primary" type="button" ng-click="$ctrl.goLogin()">OK</button>
+            </div>
+        </script>
+    </div>
+
+    
+</section>
+
+
+
+<section id="mobile-signup" class="visible-xs visible-sm">
+    <div ng-if="isLoading" id="loading-bar-auth-sm"></div>
+    <div class="container">    
+        <div class="row">
+            <div class="col-xs-12 signup-title" align="center">
+                <h3>Sign up for Lifebook</h3><br/>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12 signup-inputs" align="center">
+                <form role="form" name="mSignupForm" ng-submit="validateSignup()">
+                    <div class="row well">
+                        <div class="col-xs-12" align="left">
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.firstname.$error.required && !mSignupForm.firstname.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                    <input type="text" id="firstname" class="form-control" name="firstname" ng-model="signupData.firstname" placeholder="Enter your First Name" ng-required="true" autofocus>
+                                </div>
+                                <span ng-show="mSignupForm.firstname.$error.required && !mSignupForm.firstname.$pristine" class="help-inline">First Name required</span>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.lastname.$error.required && !mSignupForm.lastname.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
+                                    <input type="text" id="lastname" class="form-control" name="lastname" ng-model="signupData.lastname" placeholder="Enter your Last Name" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.lastname.$error.required && !mSignupForm.lastname.$pristine" class="help-inline">Last Name required</span>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.username.$error.required && !mSignupForm.username.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
+                                    <input type="text" id="username" class="form-control" name="username" ng-model="signupData.username" placeholder="Enter your Username" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.username.$error.required && !mSignupForm.username.$pristine" class="help-inline">Username required</span>
+                            </div>
+
+
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.email.$error.required && !mSignupForm.email.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                    <input type="email" id="email" class="form-control" name="email" ng-model="signupData.email" placeholder="Enter your Email" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.email.$error.required && !mSignupForm.email.$pristine" class="help-inline">Email required <br/></span>
+                                <span ng-show="mSignupForm.email.$error.email" class="help-inline">Invalid email</span>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.password.$error.required && !mSignupForm.password.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                    <input type="password" id="password" class="form-control" name="password" ng-model="signupData.password" placeholder="Enter your Password" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.password.$error.required && !mSignupForm.password.$pristine" class="help-inline">Password required</span>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : (mSignupForm.confirmPassword.$error.required && !mSignupForm.confirmPassword.$pristine) || (!passwordsMatch() && !mSignupForm.confirmPassword.$pristine)}">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa" aria-hidden="true"></i></span>
+                                    <input type="password" id="confirmPassword" class="form-control" name="confirmPassword" ng-model="confirmPassword" placeholder="Confirm your Password" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.confirmPassword.$error.required && !mSignupForm.confirmPassword.$pristine" class="help-inline">Password required <br/></span>
+                                <span ng-show="!mSignupForm.confirmPassword.$pristine && !passwordsMatch()" class="help-inline">Passwords do not match</span>
+                            </div>
+
+                            <div class="form-group" class="radio">
+                                <div class="input-group">
+                                    <label class="radio-inline">
+                                        <input type="radio" id="male" name="gender" ng-model="signupData.gender" value="male">Male
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" id="female" name="gender" ng-model="signupData.gender" value="female">Female
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{ 'has-error' : mSignupForm.birthdate.$error.required && !mSignupForm.birthdate.$pristine }">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-calendar fa" aria-hidden="true"></i></span>
+                                    <input type="date" max="{{maxDate}}" id="birthdate" class="form-control" name="birthdate" ng-model="signupData.birthdate" placeholder="Birth Date" ng-required="true">
+                                </div>
+                                <span ng-show="mSignupForm.birthdate.$error.required && !mSignupForm.birthdate.$pristine" class="help-inline">Birth date required</span>
+                            </div>
+
+                            <div class="form-group">
+                                <span ng-show="emailExists" class="help-inline">Email exists <br/></span>
+                                <span ng-show="usernameExists" class="help-inline">Username exists</span>
+                            </div>
+
+                            <div class="form-group">
+                                <span ng-show="internalServerError" class="help-inline">Internal Server Error! Please try again later.</span>
+                            </div>
+
+                            <div class="form-group" align="center">
+                                <button type="submit" class="btn btn-block btn-primary" ng-disabled="mSignupForm.$invalid">Sign Up</button>
+                            </div>
+                            <div class="form-group" align="center">
+                                <button type="button" ui-sref="login" class="btn btn-link">Already have an account?</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        
+    </div>
+</section>

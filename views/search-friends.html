@@ -1,0 +1,106 @@
+<section id="search-friends" class="hidden-xs" >
+    <div ng-if="isLoading" id="loading-bar"></div>
+    <div class="container well">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7">
+                <h2><i role="button" ng-click="goProfile()" class="fa fa-arrow-left" aria-hidden="true"></i> All users in Lifebook:</h2>
+                <hr/>
+                
+            </div>
+            <div class="col-xs-12 col-sm-5 form-group pull-right">
+                <div class="input-group h2">
+                    <span class="input-group-addon input-lg"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control input-lg" ng-model="searchUser" placeholder="Search user...">
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div ng-show="internalServerError" class="alert alert-danger">
+                    <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                </div>
+                <div ng-show="noUsers && !nternalServerError" class="alert alert-info">
+                    <strong>No users in lifebook :(!</strong>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" ng-repeat="user in users" ng-switch on="$index % 2">
+            <div class="col-xs-12 col-sm-6" ng-switch-when="0">
+                <div class="panel panel-default">
+                    <div class="panel-header">
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-3">
+                                <a role="button" ng-click="goProfile(users[$index].id)"><img class="panel-thumb-lg img-rounded" ng-src="{{users[$index].profile_img}}"></a>
+                            </div>
+                            <div class="col-xs-9 col-sm-8 col-md-9">
+                                <a class="panel-author-lg" role="button" ng-click="goProfile(users[$index].id)">{{users[$index].name = users[$index].firstname + ' ' + users[$index].lastname;}}</a>
+                                <br/><br/>
+                                <button type="button" class="btn btn-primary btn-block btn-sm" ng-show="!users[$index].isFriend" ng-click="followUser(users[$index])"> <i class="fa fa-user-plus" aria-hidden="true"></i> Follow</button>
+                                <button type="button" class="btn btn-danger btn-block btn-sm" ng-show="users[$index].isFriend" ng-click="unfollowUser(users[$index])"><i class="fa fa-times" aria-hidden="true"></i> Unfollow </button>
+                            </div>                                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6" ng-switch-when="0" ng-if="users[$index + 1]">
+                <div class="panel panel-default">
+                    <div class="panel-header">
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-3">
+                                <a role="button" ng-click="goProfile(users[$index + 1].id)"><img class="panel-thumb-lg img-rounded" ng-src="{{users[$index + 1].profile_img}}"></a>
+                            </div>
+                            <div class="col-xs-9 col-sm-8 col-md-9">
+                                <a class="panel-author-lg" role="button" ng-click="goProfile(users[$index + 1].id)">{{users[$index + 1].name = users[$index + 1].firstname + ' ' + users[$index + 1].lastname;}}</a>
+                                <br/><br/>
+                                <button type="button" class="btn btn-primary btn-block btn-sm" ng-show="!users[$index + 1].isFriend" ng-click="followUser(users[$index + 1])"> <i class="fa fa-user-plus" aria-hidden="true"></i> Follow</button>
+                                <button type="button" class="btn btn-danger btn-block btn-sm" ng-show="users[$index + 1].isFriend" ng-click="unfollowUser(users[$index + 1])"><i class="fa fa-times" aria-hidden="true"></i> Unfollow </button>
+                            </div>                                        
+                        </div>
+                    </div>
+                </div>                
+            </div> 
+        </div>
+    </div>
+</section> 
+    
+    
+<section id="mobile-search-friends" class="visible-xs">    
+    <div ng-if="isLoading" id="loading-bar-sm"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mobile-searchfriends-searchbar">
+                    <div class="input-group" align="left">
+                        <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                        <input type="text" class="form-control" ng-model="searchUser" placeholder="Search user...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="mobile-searchfriends-box-panel">
+                    
+                    <div class="mobile-searchfriends-box" ng-repeat="user in users | filter: {name: searchUser}">
+                        
+                        <img class="img-rounded img-mobile-searchfriends" role="button" ng-click="goProfile(user.id)" ng-src="{{user.profile_img}}">
+                        
+                        <span class="mobile-searchfriends-text">
+                            <span class="mobile-searchfriends-name" role="button" ng-click="goProfile(user.id)">{{user.firstname}} {{user.lastname}}</span>
+                        </span>
+                        
+                        <span class="mobile-searchfriends-btn" align="right">
+                            <button type="button" align="right" class="btn btn-primary btn-xs mobile-searchfriends-btn-follow" ng-if="!user.isFriend" ng-click="followUser(user)"> <i class="fa fa-user-plus" aria-hidden="true"></i> Follow</button>
+
+                            <button type="button" class="btn btn-danger btn-xs mobile-searchfriends-btn-follow" ng-if="user.isFriend" ng-click="unfollowUser(user)"><i class="fa fa-times" aria-hidden="true"></i> Unfollow </button>
+                        </span>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

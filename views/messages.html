@@ -1,0 +1,288 @@
+<section id="messages">
+    
+    <div class="container well hidden-xs hidden-sm">
+        <div ng-if="isLoading" id="loading-bar"></div>
+        <div class="row">
+            
+            <div class="col-xs-12 col-sm-4 message-users-panel-title">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="input-group" align="left">
+                            <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" ng-model="searchUser" placeholder="Search user...">
+                        </div> 
+                    </div>
+                    <div class="col-xs-12 col-sm-6 pull-right" align="right">
+                        <button type="button" class="btn btn-primary" ng-class="{'disabled':internalServerError}" ng-click="!internalServerError && openNewMessageModal()"><i class="fa fa-pencil-square-o"></i> New Message</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xs-12 col-sm-8 message-text-panel-title" align="center">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h4 role="button" ng-click="goProfile(selectedUser.id)">{{selectedUser.name}}</h4>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <div class="row">
+            <div class="col-xs-12 col-sm-4 message-users-panel">
+                
+                <div class="mobile-message-users-box" role="button" ng-repeat="user in users | filter: {name: searchUser}" ng-click="setActive(user.uid, user.name);toggleMobileMessageDialog()">
+                    
+                    <img class="message-users-img img-circle" ng-src="users/profile_imgs/{{user.uid}}.jpg" onerror="this.src='img/profile-default.jpg'">
+                    
+                    <span class="mobile-message-users-text">
+                        <span class="mobile-message-users-name">{{user.name}}</span>
+                    </span>
+                    <span class="mobile-message-users-date">
+                        {{ user.dDate + " " + user.dMonth + " " + user.dYear + " " + user.dHours + ":" + user.dMinutes}}
+                    </span>                    
+                </div> 
+            </div>
+            
+            <div class="col-xs-12 col-sm-8">
+                <div class="message-text-panel message-dialog" scroll-glue>
+                    <div ng-show="noMessages" class="alert alert-info">
+                        <strong>No messages available!</strong>
+                    </div>
+                    <div ng-show="internalServerError" class="alert alert-danger">
+                        <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                    </div>
+                    <div class="message-text-box" ng-repeat="message in messages" ng-show="message.uid == selectedUser.id">
+                        <div class="message-text-box-left" ng-show="message.sender_id != session.uid">
+                            <a role="button" ng-click="goProfile(message.sender_id)">
+                                <img class="message-sender-img img-circle" ng-src="users/profile_imgs/{{message.sender_id}}.jpg" 
+                                     onerror="this.src='img/profile-default.jpg'">
+                            </a>
+                            <p class="message-text message-text-left">{{message.text}}</p>
+                            <p class="message-date message-date-left">{{ message.dDate + " " + message.dMonth + " " + message.dYear + " " + message.dHours + ":" + message.dMinutes}}</p>
+                        </div>
+                        <div class="message-text-box-right" ng-show="message.sender_id == session.uid">
+                            <p class="message-text message-text-right">{{message.text}}</p>
+                            <a role="button" ng-click="goProfile(message.sender_id)">
+                                <img class="message-sender-img img-circle" ng-src="users/profile_imgs/{{message.sender_id}}.jpg" 
+                                     onerror="this.src='img/profile-default.jpg'">
+                            </a>
+                            <p class="message-date message-date-right">{{ message.dDate + " " + message.dMonth + " " + message.dYear + " " + message.dHours + ":" + message.dMinutes}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="message-input-panel">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form ng-show="showMessageInputForm" role="form" name="sendMessageForm" ng-submit="sendMessage()">
+                                <div class="input-group">
+                                    <textarea style="resize: none;" type="text" rows="1" class="form-control" name="message" ng-model="newMessage.text"  placeholder="Type a message..." ng-required="true" autofocus></textarea>
+                                    <span class="input-group-btn ">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="sendMessageForm.$invalid">Send</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div> 
+    
+    <div class="container well visible-xs visible-sm">
+        <div ng-if="isLoading" id="loading-bar-sm"></div>
+        <div ng-show="!showMobileMessageDialog" class="row">
+            <div class="col-xs-12 mobile-message-text-panel-title" align="center">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <div class="input-group" align="left">
+                            <span class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                            <input type="text" class="form-control" ng-model="searchUser" placeholder="Search user...">
+                        </div>
+                    </div>
+                    <div class="col-xs-3 pull-right" align="right">
+                        <button type="button" class="btn btn-primary" ng-class="{'disabled':internalServerError}" ng-click="!internalServerError && toggleMobileNewMessage(true)">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-show="!showMobileMessageDialog" class="row">
+            <div class="col-xs-12 mobile-message-users-box-panel"> 
+                <div ng-show="noMessages" class="alert alert-info">
+                    <strong>No messages available!</strong>
+                </div>
+                <div ng-show="internalServerError" class="alert alert-danger">
+                    <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                </div>
+                
+                <div class="mobile-message-users-box" role="button" ng-repeat="user in users | filter: {name: searchUser}" ng-click="setActive(user.uid, user.name);toggleMobileMessageDialog()">
+                    
+                    <img class="message-users-img img-circle" ng-src="users/profile_imgs/{{user.uid}}.jpg" onerror="this.src='img/profile-default.jpg'">
+                    
+                    <span class="mobile-message-users-text">
+                        <span class="mobile-message-users-name">{{user.name}}</span>
+                    </span>
+                    <span class="mobile-message-users-date">
+                            {{ user.dDate + " " + user.dMonth + " " + user.dYear + " " + user.dHours + ":" + user.dMinutes}}
+                    </span>                    
+                </div> 
+                
+            </div>
+        </div>
+        
+        <div ng-show="showMobileMessageDialog && !showMobileNewMessage" class="row">
+            <div class="col-xs-12 mobile-message-text-panel-title" align="center">
+                <div class="row">
+                    <div class="col-xs-1 pull-left">
+                        <h4 role="button" ng-click="toggleMobileMessageDialog()">
+                            <i  class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </h4>
+                    </div>
+                    <div class="col-xs-11">
+                        <h4 role="button" ng-click="goProfile(selectedUser.id)">{{selectedUser.name}}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-show="showMobileMessageDialog && !showMobileNewMessage" class="row">
+            
+            <div class="col-xs-12">
+                <div class="mobile-message-text-panel mobile-message-dialog" scroll-glue>
+                    <div ng-show="noMessages" class="alert alert-info">
+                        <strong>No messages available!</strong>
+                    </div>
+                    <div ng-show="internalServerError" class="alert alert-danger">
+                        <strong>Internal Server Error!</strong> Refresh the page or login again to your account.
+                    </div>
+                    <div class="message-text-box" ng-repeat="message in messages" ng-show="message.uid == selectedUser.id">
+                        <div class="message-text-box-left" ng-show="message.sender_id != session.uid">
+                            <a role="button" ng-click="goProfile(message.sender_id)">
+                                <img class="message-sender-img img-circle" ng-src="users/profile_imgs/{{message.sender_id}}.jpg" 
+                                     onerror="this.src='img/profile-default.jpg'">
+                            </a>
+                            <p class="message-text message-text-left">{{message.text}}</p>
+                            <p class="message-date message-date-left">{{ message.dDate + " " + message.dMonth + " " + message.dYear + " " + message.dHours + ":" + message.dMinutes}}</p>
+                        </div>
+                        <div class="message-text-box-right" ng-show="message.sender_id == session.uid">
+                            <p class="message-text message-text-right">{{message.text}}</p>
+                            <a role="button" ng-click="goProfile(message.sender_id)">
+                                <img class="message-sender-img img-circle" ng-src="users/profile_imgs/{{message.sender_id}}.jpg" 
+                                     onerror="this.src='img/profile-default.jpg'">
+                            </a>
+                            <p class="message-date message-date-right">{{ message.dDate + " " + message.dMonth + " " + message.dYear + " " + message.dHours + ":" + message.dMinutes}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mobile-message-input-panel">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form ng-show="showMessageInputForm" role="form" name="mSendMessageForm" ng-submit="sendMessage()">
+                                <div class="input-group">
+                                    <textarea style="resize: none;" type="text" rows="1" class="form-control" name="message" ng-model="newMessage.text"  placeholder="Type a message..." ng-required="true" autofocus></textarea>
+                                    <span class="input-group-btn ">
+                                        <button type="submit" class="btn btn-primary" ng-disabled="mSendMessageForm.$invalid">Send</button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-show="showMobileNewMessage" class="row">
+            <div class="col-xs-12 mobile-new-message-title" align="center">
+                <div class="row">
+                    <div class="col-xs-1 pull-left">
+                        <h4 role="button" ng-click="toggleMobileNewMessage(false)">
+                            <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                        </h4>
+                    </div>
+                    <div class="col-xs-11">
+                        <h4>New Message</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div ng-show="showMobileNewMessage" class="row">
+            <div class="col-xs-12">
+                <div class="mobile-new-message-text">
+                    <form role="form" name="sendNewMobileMessageForm" ng-submit="sendMobileMessage()">
+                        <div class="modal-body" id="modal-body">
+                            <div  class="form-group">
+                                <label for="receiver">To:</label>
+                                <select class="form-control" id="mob-receiver" ng-model="newMessageInModal.receiver_id" ng-required="true">
+                                    <option ng-repeat="receiver in receivers" value="{{receiver.id}}">{{receiver.firstname}} {{receiver.lastname}}</option>
+                                </select> 
+                                <div ng-show="noFollowers">
+                                    <br/>
+                                    <div class="alert alert-info">
+                                        <strong>You must follow at least one member to send a new message</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message:</label>
+                                <textarea style="resize: none;" type="text" rows="7" class="form-control" name="message" ng-model="newMessageInModal.text" placeholder="Type a message..." ng-required="true" autofocus></textarea>  
+                            </div>
+                        </div>
+                        <div class="modal-footer mobile-new-message-input">
+                            <button class="btn btn-primary btn-block" type="submit" ng-disabled="sendNewMobileMessageForm.$invalid">Send</button>
+                            <button class="btn btn-default btn-block" type="button" ng-click="toggleMobileNewMessage(false)">Cancel</button>
+                        </div>
+                    </form>
+                    
+                    
+                    
+                    
+                </div>
+            </div>
+        </div>  
+        
+    </div>
+</section>
+
+
+<div ng-controller="MessagesController as $ctrl" class="modal-demo">
+    <script type="text/ng-template" id="ModalNewMessage.html">
+
+        <form role="form" name="sendMessageInModalForm" ng-submit="$ctrl.sendMessage()">
+            <div class="modal-header">
+              <h4 class="modal-title">New Message</h4>
+            </div>
+
+            <div class="modal-body" id="modal-body">
+                <div  class="form-group">
+                    <label for="receiver">To:</label>
+                    <select class="form-control" id="receiver" ng-model="newMessageInModal.receiver_id" ng-required="true">
+                        <option ng-repeat="receiver in receivers" value="{{receiver.id}}">{{receiver.firstname}} {{receiver.lastname}}</option>
+                    </select> 
+                    <div ng-show="noFollowers">
+                        <br/>
+                        <div class="alert alert-info">
+                            <strong>You must follow at least one member to send a new message</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea style="resize: none;" type="text" rows="4" class="form-control" name="message" ng-model="newMessageInModal.text" placeholder="Type a message..." ng-required="true" autofocus></textarea>  
+                </div>
+
+
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+                <button class="btn btn-primary" type="submit" ng-disabled="sendMessageInModalForm.$invalid">Send</button>
+            </div>
+        </form>
+    </script>
+</div>
